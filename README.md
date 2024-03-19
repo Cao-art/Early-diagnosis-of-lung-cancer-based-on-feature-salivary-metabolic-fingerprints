@@ -41,12 +41,12 @@
  
 ### PCA
 
- rm(list =ls())
- data = read.csv("test.csv",check.names = F)
- data$Group<-as.factor(data$Group)
- norm1_pca<-prcomp(data[,-1])
- norm1_pcs<-data.frame(norm1_pca$x)
- norm1_pcs<-data.frame(norm1_pca$x,Group=data$Group)
+  rm(list =ls())
+  data = read.csv("test.csv",check.names = F)
+  data$Group<-as.factor(data$Group)
+  norm1_pca<-prcomp(data[,-1])
+  norm1_pcs<-data.frame(norm1_pca$x)
+  norm1_pcs<-data.frame(norm1_pca$x,Group=data$Group)
  
 #### Extracting the variance contribution rate of principal components
 
@@ -87,12 +87,10 @@
    FC = c()
    for(i in 2:ncol(d)){
     FC[i-1] = mean(d[d$Group =="A",i])/mean(d[d$Group =="B",i])
-   re = cbind(colnames(d[,-1]),FC)
-   }
-  }
-  FC = as.data.frame(FC(data))  
-
-
+    re = cbind(colnames(d[,-1]),FC)
+    }
+    }
+   FC = as.data.frame(FC(data))  
    result = cbind(FDR,FC)[,-5]
    result$FC = as.numeric(result$FC)
    for(i in 1:nrow(result)){
@@ -105,12 +103,10 @@
     library(magrittr)
     library(clusterProfiler)
     library(reshape2)
-
-   keggannotation <- read.csv("KEGG pathway enrichment.csv",check.names = F)##download from KEGG
-
-   x <- clusterProfiler::enricher(gene = kegg_a$`kegg ID`,##metabolites KEGG ID
+    keggannotation <- read.csv("KEGG pathway enrichment.csv",check.names = F)##download from KEGG
+    x <- clusterProfiler::enricher(gene = kegg_a$`kegg ID`,##metabolites KEGG ID
                                TERM2GENE =keggannotation,minGSSize = 1)
-   re = as.data.frame(x@result) 
+    re = as.data.frame(x@result) 
  
 ####machine learning
 
@@ -135,7 +131,6 @@
    )
    time2 <- Sys.time()
    print(time2-time1)
-
    stopImplicitCluster()
    stopCluster(cl)##
    dim(norm) #
@@ -152,7 +147,6 @@
                     summaryFunction =multiClassSummary,
                     classProbs =T,allowParallel = T,
                     verboseIter = T)
-
    cl <- makeCluster(detectCores()-1)
    registerDoParallel(cl)
    time1 <- Sys.time()#
@@ -165,12 +159,9 @@
    )
    time2 <- Sys.time()
    print(time2-time1)
-
    stopImplicitCluster()
    stopCluster(cl)##
-
    saveRDS(mod1, "mod.rds")
-
    perfomance= function(m){
     Accuracy=mean(m[["resample"]][["Accuracy"]])
     Sensitivity=mean(m[["resample"]][["Sensitivity"]])
@@ -183,7 +174,6 @@
     re = data.frame(Accuracy,Sensitivity,Specificity,Pos_Pred_Value,Neg_Pred_Value,Kappa,F1,Precision)
     return(re)
     }
-
     reptest=perfomance(mods)###Outputting the results of model cross-validation
 
 ##model prediction
@@ -249,7 +239,7 @@
    b = c(66,4)
    c = c(65,4)
    s=chisq.test(cbind(a,cbind(b,c)),correct = F)
-  s
+   s
    s$expected##expected frequency
    s$observed
  
