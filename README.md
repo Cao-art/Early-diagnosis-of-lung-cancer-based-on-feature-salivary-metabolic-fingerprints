@@ -1,28 +1,37 @@
 # Early-diagnosis-of-lung-cancer-based-on-feature-salivary-metabolic-fingerprints
 #Data normalization
- library('vegan')
+
+        library('vegan')
+        
 #Data normalization, with samples as rows and features as columns
- data =read.csv("test.csv",row.names = 1,check.names = F)
- x<-as.matrix(data[,-1])
- norm<- decostand(x, method="range",MARGIN=2)
+
+        data =read.csv("test.csv",row.names = 1,check.names = F)
+        x<-as.matrix(data[,-1])
+        norm<- decostand(x, method="range",MARGIN=2)
+        
 ###Correlation analysis
- require(psych)
- require(ggcor)
- cor <- corr.test(t(norm),method = "spearman")####spearman
+
+    require(psych)
+    require(ggcor)
+    cor <- corr.test(t(norm),method = "spearman")####spearman
+    
 ####RSD
- QC = read.csv("QC.csv",row.names = 1,check.names = F)#读入数据,列名为特征，行名为样本
- RSD = function(d){
-  rsd <- c()
-  for (i in 2:ncol(d)){
+
+     QC = read.csv("QC.csv",row.names = 1,check.names = F)#读入数据,列名为特征，行名为样本
+    RSD = function(d){
+    rsd <- c()
+    for (i in 2:ncol(d)){
     rsd[i-1]= sd(d[,i])/mean(d[,i])
-  }
-  rsd = as.data.frame(rsd)
-  row.names(rsd) = colnames(d[,-1])
-  return(rsd)
-  }
- QCrsd = RSD(QC)
+    }
+    rsd = as.data.frame(rsd)
+    row.names(rsd) = colnames(d[,-1])
+    return(rsd)
+    }
+    QCrsd = RSD(QC)
+   
 #### Normality test
- QC = read.csv("QC.csv",row.names = 1,check.names = F)
+
+    QC = read.csv("QC.csv",row.names = 1,check.names = F)
  re = c()
  for(i in 2:ncol(QC)){
   a = shapiro.test(as.numeric(QC[,i]))[["p.value"]]
